@@ -11,13 +11,14 @@ import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.Toast;
 import android.widget.TextView;
+import android.widget.ImageButton;
 
 public class QuizActivity extends AppCompatActivity {
 
     private Button mTrueButton;
     private Button mFalseButton;
-    private Button mNextButton;
-    private Button mPreviousButton;
+    private ImageButton mNextButton;
+    private ImageButton mPreviousButton;
     private TextView mQuestionTextView;
 
     private TrueFalse[] mQuestionBank = new TrueFalse[]{
@@ -75,28 +76,44 @@ public class QuizActivity extends AppCompatActivity {
             }
         });
 
-        mNextButton = (Button) findViewById(R.id.next_button);
+        mNextButton = (ImageButton) findViewById(R.id.next_button);
         mNextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
-                int question = mQuestionBank[mCurrentIndex].getQuestion();
-                updateQuestion();
+                setNextQuestion();
             }
         });
 
-        mNextButton = (Button) findViewById(R.id.previous_button);
-        mNextButton.setOnClickListener(new View.OnClickListener() {
+        mPreviousButton = (ImageButton) findViewById(R.id.previous_button);
+        mPreviousButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mCurrentIndex = Math.abs((mCurrentIndex + 1) % mQuestionBank.length);
-                int question = mQuestionBank[mCurrentIndex].getQuestion();
-                updateQuestion();
+                setPreviousQuestion();
             }
         });
 
         updateQuestion();
 
+        // add the onClickListener to text box so tapping the question goes to the next one.
+        mQuestionTextView.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                setNextQuestion();
+            }
+        });
+
+
+    }
+
+    private void setNextQuestion() {
+        mCurrentIndex = (mCurrentIndex + 1) % mQuestionBank.length;
+        int question = mQuestionBank[mCurrentIndex].getQuestion();
+        updateQuestion();
+    }
+
+    private void setPreviousQuestion() {
+        mCurrentIndex = Math.abs((mCurrentIndex + 1) % mQuestionBank.length);
+        int question = mQuestionBank[mCurrentIndex].getQuestion();
+        updateQuestion();
     }
 
         @Override
@@ -120,4 +137,5 @@ public class QuizActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
 }
